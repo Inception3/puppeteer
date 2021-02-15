@@ -25,8 +25,7 @@ import { promisify } from 'util';
 const mkdtempAsync = promisify(fs.mkdtemp);
 const writeFileAsync = promisify(fs.writeFile);
 
-import { ChromeArgOptions, LaunchOptions } from './LaunchOptions.js';
-import { BrowserOptions } from '../common/BrowserConnector.js';
+import { BrowserArgOptions, AllNodeLaunchOptions } from './LaunchOptions.js';
 import { Product } from '../common/Product.js';
 
 /**
@@ -34,7 +33,7 @@ import { Product } from '../common/Product.js';
  * @public
  */
 export interface ProductLauncher {
-  launch(object);
+  launch(object: AllNodeLaunchOptions);
   executablePath: () => string;
   defaultArgs(object);
   product: Product;
@@ -58,9 +57,7 @@ class ChromeLauncher implements ProductLauncher {
     this._isPuppeteerCore = isPuppeteerCore;
   }
 
-  async launch(
-    options: LaunchOptions & ChromeArgOptions & BrowserOptions = {}
-  ): Promise<Browser> {
+  async launch(options: AllNodeLaunchOptions = {}): Promise<Browser> {
     const {
       ignoreDefaultArgs = false,
       args = [],
@@ -152,11 +149,7 @@ class ChromeLauncher implements ProductLauncher {
     }
   }
 
-  /**
-   * @param {!Launcher.ChromeArgOptions=} options
-   * @returns {!Array<string>}
-   */
-  defaultArgs(options: ChromeArgOptions = {}): string[] {
+  defaultArgs(options: BrowserArgOptions = {}): string[] {
     const chromeArguments = [
       '--disable-background-networking',
       '--enable-features=NetworkService,NetworkServiceInProcess',
@@ -230,13 +223,7 @@ class FirefoxLauncher implements ProductLauncher {
     this._isPuppeteerCore = isPuppeteerCore;
   }
 
-  async launch(
-    options: LaunchOptions &
-      ChromeArgOptions &
-      BrowserOptions & {
-        extraPrefsFirefox?: { [x: string]: unknown };
-      } = {}
-  ): Promise<Browser> {
+  async launch(options: AllNodeLaunchOptions = {}): Promise<Browser> {
     const {
       ignoreDefaultArgs = false,
       args = [],
@@ -346,7 +333,7 @@ class FirefoxLauncher implements ProductLauncher {
     return 'firefox';
   }
 
-  defaultArgs(options: ChromeArgOptions = {}): string[] {
+  defaultArgs(options: BrowserArgOptions = {}): string[] {
     const firefoxArguments = ['--no-remote', '--foreground'];
     if (os.platform().startsWith('win')) {
       firefoxArguments.push('--wait-for-browser');

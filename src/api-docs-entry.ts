@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { LaunchOptions, ChromeArgOptions } from './node/LaunchOptions.js';
+import { LaunchOptions, BrowserArgOptions } from './node/LaunchOptions.js';
 import { BrowserOptions } from './common/BrowserConnector.js';
 import { Product } from './common/Product.js';
 import { Browser } from './common/Browser.js';
@@ -95,7 +95,7 @@ export * from 'devtools-protocol/types/protocol';
  */
 export declare function launch(
   options?: LaunchOptions &
-    ChromeArgOptions &
+    BrowserArgOptions &
     BrowserOptions & {
       product?: Product;
       extraPrefsFirefox?: Record<string, unknown>;
